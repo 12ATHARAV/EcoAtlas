@@ -17,6 +17,15 @@
   <b>Empowering conservationists, carbon registries, and ecological researchers with high-resolution satellite intelligence, polygon boundary drawing, geodesic area computation, and multi-sensor time-series environmental analytics.</b>
 </p>
 
+### 🌐 Live Production Deployments
+
+| Component | Production URL | Status |
+| :--- | :--- | :--- |
+| **Live Frontend (Vercel)** | **[https://frontend-ten-psi-18.vercel.app/](https://frontend-ten-psi-18.vercel.app/)** | 🟢 Online |
+| **Live Backend API (Render)** | **[https://ecoatlas-api-j53h.onrender.com/](https://ecoatlas-api-j53h.onrender.com/)** | 🟢 Online |
+| **Interactive API Documentation** | **[https://ecoatlas-api-j53h.onrender.com/docs](https://ecoatlas-api-j53h.onrender.com/docs)** | 🟢 Online |
+| **GitHub Repository** | **[https://github.com/12ATHARAV/EcoAtlas](https://github.com/12ATHARAV/EcoAtlas)** | 🟢 Public |
+
 </div>
 
 ---
@@ -254,7 +263,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
    - `DATABASE_URL`: *Your Neon PostgreSQL connection string*
    - `SECRET_KEY`: *Any secure random secret key*
    - `PROJECT_NAME`: `EcoAtlas API`
-5. Click **Deploy**. Note your live Render URL (e.g. `https://ecoatlas-api.onrender.com`).
+5. Click **Deploy**. Your live Render URL is: **`https://ecoatlas-api-j53h.onrender.com/`**.
 
 ### 3. Frontend (Vercel)
 1. In [vercel.com](https://vercel.com), click **Add New...** → **Project**.
@@ -263,9 +272,9 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
    - **Framework Preset**: `Vite`
    - **Root Directory**: `frontend`
 4. Environment Variables:
-   - `VITE_API_URL`: `https://your-backend.onrender.com/api`
+   - `VITE_API_URL`: `https://ecoatlas-api-j53h.onrender.com/api`
    - `VITE_MAPBOX_TOKEN`: *Your Mapbox public token*
-5. Click **Deploy**. Your application is live!
+5. Click **Deploy**. Your application is live at: **`https://frontend-ten-psi-18.vercel.app/`**!
 
 ---
 
