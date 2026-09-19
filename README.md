@@ -68,7 +68,6 @@ Open http://localhost:5173 in your browser.
 4. Start Command: uvicorn app.main:app --host 0.0.0.0 --port 
 5. Set environment variable: DATABASE_URL
 
-## Automated Testing & CI/CD
+## Automated Testing
 - Pytest suite: pytest backend/tests (6 passing unit tests)
-- Husky + lint-staged configured for pre-commit verification.
-- GitHub Actions pipeline configured in .github/workflows/ci-cd.yml.
+
