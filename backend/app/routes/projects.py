@@ -1,4 +1,4 @@
-﻿from typing import List
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -9,6 +9,7 @@ from app.services.auth_service import get_current_user
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
 @router.get("", response_model=List[ProjectResponse])
+@router.get("/", response_model=List[ProjectResponse])
 def get_projects(db: Session = Depends(get_db)):
     projects = db.query(Project).all()
     results = []
@@ -55,6 +56,7 @@ def get_projects(db: Session = Depends(get_db)):
     return results
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
 def create_project(
     project_in: ProjectCreate,
     db: Session = Depends(get_db),

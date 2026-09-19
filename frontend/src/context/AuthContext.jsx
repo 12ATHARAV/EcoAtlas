@@ -11,12 +11,16 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       const storedUser = localStorage.getItem('ecoatlas_user');
       const token = localStorage.getItem('ecoatlas_token');
+      
       if (storedUser && token) {
         try {
-          setUser(JSON.parse(storedUser));
+          // Verify existing token with backend
+          const meResp = await api.get('/auth/me');
+          setUser(meResp.data);
           setLoading(false);
           return;
         } catch (e) {
+          // Token expired or invalid for this backend instance; clean up and re-authenticate
           localStorage.removeItem('ecoatlas_user');
           localStorage.removeItem('ecoatlas_token');
         }
@@ -33,7 +37,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('ecoatlas_user', JSON.stringify(userData));
         setUser(userData);
       } catch (err) {
-        // If server is not yet ready or credentials differ
         console.warn('Auto demo login skipped:', err?.message);
       } finally {
         setLoading(false);

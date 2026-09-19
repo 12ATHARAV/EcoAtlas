@@ -27,20 +27,27 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS setup
+# CORS setup - support all origins (localhost, Vercel deployments, preview URLs)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_origin_regex=r".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include Routers
+# Include Routers with /api prefix (primary)
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(projects.router, prefix=settings.API_V1_STR)
 app.include_router(sites.router, prefix=settings.API_V1_STR)
 app.include_router(analytics.router, prefix=settings.API_V1_STR)
+
+# Also include Routers without /api prefix as fallback aliases
+app.include_router(auth.router)
+app.include_router(projects.router)
+app.include_router(sites.router)
+app.include_router(analytics.router)
 
 @app.get("/")
 def root():

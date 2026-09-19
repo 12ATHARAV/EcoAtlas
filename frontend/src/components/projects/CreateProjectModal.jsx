@@ -26,7 +26,17 @@ const CreateProjectModal = ({ isOpen, onClose, onProjectCreated }) => {
       setName('');
       setDescription('');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create project. Check your login status.');
+      console.error('Failed to create project:', err);
+      const detail = err.response?.data?.detail;
+      let errorMsg = 'Failed to create project.';
+      if (typeof detail === 'string') {
+        errorMsg = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        errorMsg = detail.map((d) => d.msg || d.message).join(', ');
+      } else if (err.message) {
+        errorMsg = `${err.message}. Please verify your network and backend connection.`;
+      }
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Layers, TreePine, Award, TrendingUp, ArrowUpRight, Plus, MapPin } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import MapView from '../components/map/MapView';
@@ -14,41 +14,7 @@ const DashboardPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [sumRes, geoRes] = await Promise.all([
-          api.get('/analytics/summary'),
-          api.get('/sites/geojson'),
-        ]);
-        setSummary(sumRes.data);
-        const features = geoRes.data.features || [];
-        const siteList = features.map((f) => ({
-          id: f.id,
-          name: f.properties.name,
-          project_name: f.properties.project_name,
-          project_id: f.properties.project_id,
-          geometry: f.geometry,
-          area_hectares: f.properties.area_hectares,
-          region: f.properties.region,
-          centroid_lat: f.properties.centroid_lat,
-          centroid_lng: f.properties.centroid_lng,
-        }));
-        setSites(siteList);
-
-        if (siteList.length > 0) {
-          handleSelectSite(siteList[0]);
-        }
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleSelectSite = async (site) => {
+  const handleSelectSite = useCallback(async (site) => {
     setSelectedSite(site);
     try {
       const resp = await api.get(`/sites/${site.id}/analytics`);
@@ -56,7 +22,42 @@ const DashboardPage = () => {
     } catch (err) {
       console.error('Failed to load site analytics', err);
     }
-  };
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const [sumRes, geoRes] = await Promise.all([
+        api.get('/analytics/summary'),
+        api.get('/sites/geojson'),
+      ]);
+      setSummary(sumRes.data);
+      const features = geoRes.data.features || [];
+      const siteList = features.map((f) => ({
+        id: f.id,
+        name: f.properties.name,
+        project_name: f.properties.project_name,
+        project_id: f.properties.project_id,
+        geometry: f.geometry,
+        area_hectares: f.properties.area_hectares,
+        region: f.properties.region,
+        centroid_lat: f.properties.centroid_lat,
+        centroid_lng: f.properties.centroid_lng,
+      }));
+      setSites(siteList);
+
+      if (siteList.length > 0) {
+        handleSelectSite(siteList[0]);
+      }
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [handleSelectSite]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const statCards = [
     {

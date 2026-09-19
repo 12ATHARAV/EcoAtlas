@@ -33,7 +33,17 @@ const AddSiteModal = ({ isOpen, onClose, projectId, onSiteAdded }) => {
       setRegion('');
       setPolygonGeometry(null);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to add site polygon.');
+      console.error('Failed to add site:', err);
+      const detail = err.response?.data?.detail;
+      let errorMsg = 'Failed to add site polygon.';
+      if (typeof detail === 'string') {
+        errorMsg = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        errorMsg = detail.map((d) => d.msg || d.message).join(', ');
+      } else if (err.message) {
+        errorMsg = `${err.message}. Please verify backend connection.`;
+      }
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
