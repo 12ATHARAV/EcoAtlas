@@ -7,6 +7,18 @@ from app.routes import auth, projects, sites, analytics
 # Create database tables automatically
 Base.metadata.create_all(bind=engine)
 
+# Auto-seed if database is brand new (e.g. freshly deployed to Render / Neon)
+try:
+    from app.database import SessionLocal
+    from app.models.models import Project
+    from app.seed.seed_data import seed
+    _db = SessionLocal()
+    if _db.query(Project).count() == 0:
+        seed()
+    _db.close()
+except Exception as _e:
+    print(f"Auto-seed check: {_e}")
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
